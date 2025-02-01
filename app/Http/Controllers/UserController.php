@@ -26,7 +26,7 @@ class UserController extends Controller
         $data['password'] = Str::random(8); // Le colocamos una contraseña por defecto
 
         $user = User::create($data);
-
         
+        return response()->json(UserResource::make($user), 201);
     }
 }
