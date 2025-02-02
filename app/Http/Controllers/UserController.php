@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Resources\UserResource; /* Importo la clase */
 
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -12,9 +13,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     
+    /* Funcion para que devuelva la lista de los usuarios al hacer gewt en postman*/
     public function index()
     {
-        //
+        return UserResource::collection(User::all());
     }
 
     /**
