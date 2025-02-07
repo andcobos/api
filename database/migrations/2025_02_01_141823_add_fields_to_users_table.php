@@ -28,3 +28,6 @@ return new class extends Migration
         });
     }
 };
+
+//standard camel case las migraciones en la terminal -> en el archivo se crea con el _
+// para crear una tabla -> php artisan make:migration createNombreNombre
