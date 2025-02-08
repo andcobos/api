@@ -37,7 +37,7 @@ class UserController extends Controller
 
 
         return UserResource::collection($users);
-        //la funcion mak,e mapea una isntaica, objeto, y cuando son varias usamos collection
+        //la funcion make mapea una isntaica, objeto, y cuando son varias usamos collection
     }
 
     /**
@@ -53,8 +53,31 @@ class UserController extends Controller
         return response()->json(UserResource::make($user), 201);
     }
 
+  
+    //public function show($user):
+    //{
+    //    $user = User::where('id', $user)->firstOrFail();
+    //    return $user;
+    //}
+
+
+    //Endpoint necesita una ruta, funcion show, al ponerle que es User $user nos devuelve lo de la BD
+    //http://api.test/api/v1/users/1 usa un identficador para buscar un usuario. Le mando el id y aca al id lo trata como $user
     public function show(User $user)
     {
-        return response()->json(UserResource::make($user),0);
+        return response()->json(UserResource::make ($user));
+    }
+
+
+    //Endpoint para acualizar un usuario
+    public function update(StoreUserRequest $request, User $user)
+    {
+        $data = $request->validated();
+        $user->update($data);
+
+        return response()->json(UserResource::make($user));
     }
 }
+
+//PUT actualiza todo
+//PATCH actualiza solo lo que le mandamos
