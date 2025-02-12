@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
+use Illuminate\Validation\Rule;
+
 
 class UserController extends Controller
 {
@@ -18,7 +20,6 @@ class UserController extends Controller
     /* Funcion para que devuelva la lista de los usuarios al hacer gewt en postman*/
     public function index()
     {
-        
         //eloquent
         $users = User::when(request()->has('username'), function($query){
             $query->where('username', 'like', '%'.request()->input('username') .'%')->get();
@@ -30,15 +31,16 @@ class UserController extends Controller
         ->paginate(request()->per_page);
 
         //query builder
-       // $users = DB::table("users")->get();
+        // $users = DB::table("users")->get();
 
        //eloquent, para hacer busquedas especificas
        //$users = User::where('username', '=', 'jose') -> get();
 
-
-        return UserResource::collection($users);
         //la funcion make mapea una isntaica, objeto, y cuando son varias usamos collection
+        return UserResource::collection($users);
+        
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -77,6 +79,31 @@ class UserController extends Controller
 
         return response()->json(UserResource::make($user));
     }
+
+
+    //Endpoint para hacer actualizacion parcial
+    public function partialUpdate(Request $request, User $user)
+    {
+        //Validaciones
+        $validatedData = $request->validate([
+            'username' => ['sometimes', 'string', Rule::unique('users')->ignore($user->id)],
+            'email' => ['sometimes', 'email', Rule::unique('users')->ignore($user->id)],
+            'password' => ['sometimes', 'string', 'min:6'],
+            'name' => ['sometimes', 'string', 'max:255'],
+            'lastname' => ['sometimes', 'string', 'max:255'],
+        ]);
+    
+        if ($request->has('password')) {
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
+    
+        $user->update($validatedData);
+    
+        return response()->json(UserResource::make($user), 200);
+    }
+
+
+
 }
 
 //PUT actualiza todo
