@@ -91,6 +91,10 @@ class UserController extends Controller
             'password' => ['sometimes', 'string', 'min:6'],
             'name' => ['sometimes', 'string', 'max:255'],
             'lastname' => ['sometimes', 'string', 'max:255'],
+        ], [
+            'username.unique' => 'Este usuario ya esta ocupado, elige otro',
+            'email.unique' => 'Este correo ya esta ocupado, elige otro',
+            'email.email' => 'Ingrese un correo valido',
         ]);
     
         if ($request->has('password')) {
@@ -108,7 +112,7 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json([
-            'message' => 'Usuario eliminado'
+            'message' => "El usuario ha sido eliminado correctamente."
         ], 200);
     }
 
