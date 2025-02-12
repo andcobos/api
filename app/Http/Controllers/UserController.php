@@ -102,9 +102,23 @@ class UserController extends Controller
         return response()->json(UserResource::make($user), 200);
     }
 
+    //Endpoint para eliminar usuarios
+    public function destroy(User $user)
+    {
+        $user->delete();
 
+        return response()->json([
+            'message' => 'Usuario eliminado'
+        ], 200);
+    }
 
 }
 
-//PUT actualiza todo
-//PATCH actualiza solo lo que le mandamos
+// SOFT DELETES EN LARAVEL
+// Elimina datos o usuarios pero los almacena en un espacio en caso de que se quieran recuperar. Se agrega una migracion y se agrega una tabla en la bd
+// que es donde se almacenaran los datos eliminados. Estos datos eliminados se excluyen de la vista de detalles como de usuarios, pero siempre estan presentes en la bd para ser restaurados. 
+// En este caso, se tendria que modificar el destroy para que al hacer Delete el usuario eliminado pase a la tabla de SoftDelete.
+// Y se tendria que agregar un endpoint para restaurar los usuarios eliminados.
+// https://fullstackseries.com/laravel-5-4-8-editar-eliminar-soft-deletes/
+// https://www.obedsanchez.com/articulo/como-usar-soft-delete-en-php-con-laravel-guia-61f575282e5a8
+// https://wpwebinfotech.com/blog/soft-deletes-in-laravel/#what-is-soft-delete-in-laravel
