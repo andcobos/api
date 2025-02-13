@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->string('lastname')->after('name');
+            $table->string('username')->unique()->after('lastname');
         });
     }
 
@@ -22,7 +23,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('lastname');
+            $table->dropColumn('username');
         });
     }
 };
+
+//standard camel case las migraciones en la terminal -> en el archivo se crea con el _
+// para crear una tabla -> php artisan make:migration createNombreNombre

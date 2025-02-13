@@ -28,4 +28,27 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
         ];
     }
+
+    /*Mensajes de error */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre es obligatorio.',
+            'name.string' => 'Ingresa texto valido',
+            'name.max' => 'Maximo 255 caracteres',
+
+            'lastname.required' => 'El apellido es obligatorio.',
+            'lastname.string' => 'Ingresa texto valido',
+            'lastname.max' => 'Mazimo 255 caracteres',
+
+            'username.required' => 'El nombre de usuario es obligatorio.',
+            'username.string' => 'Ingresa texto valido',
+            'username.max' => 'Maximo 255 caracteres',
+            'username.unique' => 'El nombre de usuario ya está en uso.',
+
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'Ingresa coprreo valido',
+            'email.unique' => 'El correo electrónico ya está registrado en el sistema.',
+        ];
+    }
 }
