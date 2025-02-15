@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\PartialUpdateRequest;
 use App\Http\Resources\UserResource; /* Importo la clase */
 
 use App\Models\User;
@@ -82,38 +83,21 @@ class UserController extends Controller
 
 
     //Endpoint para hacer actualizacion parcial
-    public function partialUpdate(Request $request, User $user)
+    public function patch(PartialUpdateRequest $request, User $user)
     {
-        //Validaciones
-        $validatedData = $request->validate([
-            'username' => ['sometimes', 'string', Rule::unique('users')->ignore($user->id)],
-            'email' => ['sometimes', 'email', Rule::unique('users')->ignore($user->id)],
-            'password' => ['sometimes', 'string', 'min:6'],
-            'name' => ['sometimes', 'string', 'max:255'],
-            'lastname' => ['sometimes', 'string', 'max:255'],
-        ], [
-            'username.unique' => 'Este usuario ya esta ocupado, elige otro',
-            'email.unique' => 'Este correo ya esta ocupado, elige otro',
-            'email.email' => 'Ingrese un correo valido',
-        ]);
-    
-        if ($request->has('password')) {
-            $validatedData['password'] = bcrypt($validatedData['password']);
-        }
-    
-        $user->update($validatedData);
-    
-        return response()->json(UserResource::make($user), 200);
+        $data = $request->validated();
+        $user->update($data);
+
+        return response()->json(UserResource::make($user));
     }
+
 
     //Endpoint para eliminar usuarios
     public function destroy(User $user)
     {
         $user->delete();
 
-        return response()->json([
-            'message' => "El usuario ha sido eliminado correctamente."
-        ], 200);
+        return response()->json(null,204);
     }
 
 }
