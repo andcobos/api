@@ -8,6 +8,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::put('/users/{user}', [UserController::class, 'update']); 
-    Route::patch('/users/{user}', [UserController::class, 'partialUpdate']);
+    Route::patch('/users/{user}', [UserController::class, 'patch']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
 });
